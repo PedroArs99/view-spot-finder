@@ -7,7 +7,6 @@ export async function viewSpotFinder(event) {
       {
         message: 'Go Serverless v3.0! Your function executed successfully!',
         input: event,
-        context,
       },
       null,
       2
