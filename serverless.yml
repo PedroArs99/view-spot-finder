@@ -9,3 +9,6 @@ provider:
 functions:
   viewSpotFinder:
     handler: handler.viewSpotFinder
+
+plugins:
+  - serverless-plugin-typescript
