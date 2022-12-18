@@ -12,3 +12,7 @@ functions:
 
 plugins:
   - serverless-plugin-typescript
+
+custom:
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './tsconfig.json'
