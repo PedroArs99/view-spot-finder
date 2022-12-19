@@ -5,56 +5,58 @@ export class Mesh {
     if (n < 1) {
       return [];
     } else {
-      const viewSpots: Element[] = [];
+      const viewSpots: Element[] = this.getViewSpots();
+      const sortedViewSpots = this.sortViewSpotsByValueDesc(viewSpots);
+      const firstNViewSpots = sortedViewSpots.slice(0, n);
 
-      for (let i = 0; i < this.elements.length; i++) {
-        const element = this.elements[i];
-
-        const neighbours = this.findNeighbours(element);
-
-        // If is ViewSpot
-        let j = 0;
-        let isNeighbourHigher = false;
-
-        while (!isNeighbourHigher && j < neighbours.length) {
-          const neighbour = neighbours[j];
-
-          if (neighbour.value > element.value) {
-            isNeighbourHigher = true;
-          } else {
-            j++;
-          }
-        }
-
-        // Then append it to the viewSpots list
-        if (j === neighbours.length) {
-          viewSpots.push(element);
-        }
-      }
-      
-      // Sort list by value and return
-      return viewSpots
-        .sort(
-          (spotA: Element, spotB: Element) => spotB.value - spotA.value
-        )
-        .slice(0, n);
+      return firstNViewSpots;
     }
   }
 
+  private getViewSpots(): Element[] {
+    return this.elements.filter((element) => this.isViewSpot(element));
+  }
+
+  private isViewSpot(element: Element): boolean {
+    const neighbours = this.findNeighbours(element);
+    const higherNeighbour = neighbours.find(
+      (neighbour) => neighbour.value > element.value
+    );
+
+    return !!higherNeighbour;
+  }
+
   private findNeighbours(element: Element): Element[] {
-    const neighbours: Element[] = [];
-
-    this.elements.forEach((otherElement) => {
-      if (otherElement.id !== element.id) {
-        const isNeighbour = otherElement.nodes.find(
-          (node) => !!element.nodes.find((n) => n.id === node.id)
-        );
-
-        if (isNeighbour) neighbours.push(otherElement);
-      }
-    });
+    const neighbours: Element[] = this.elements.filter((otherElement) =>
+      this.areElementsNeighbours(element, otherElement)
+    );
 
     return neighbours;
+  }
+
+  private areElementsNeighbours(
+    element: Element,
+    otherElement: Element
+  ): boolean {
+    return (
+      element.id !== otherElement.id &&
+      this.areThereSharedNodes(element.nodes, otherElement.nodes)
+    );
+  }
+
+  private areThereSharedNodes(
+    elementNodes: Node[],
+    otherElementNodes: Node[]
+  ): boolean {
+    return !!otherElementNodes.find(
+      (node) => !!elementNodes.find((n) => n.id === node.id)
+    );
+  }
+
+  private sortViewSpotsByValueDesc(viewSpots: Element[]) {
+    return viewSpots.sort(
+      (spotA: Element, spotB: Element) => spotB.value - spotA.value
+    );
   }
 }
 
