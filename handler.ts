@@ -1,15 +1,19 @@
-'use strict';
+"use strict";
 
-export async function viewSpotFinder(event) {
+import { FindNSpotsCommandDto } from "./models/FindNSpotsCommandDto";
+import { meshDtoToDomain } from "./models/MeshDto";
+
+export async function viewSpotFinder(event: FindNSpotsCommandDto) {
+  const mesh = meshDtoToDomain(event.mesh);
+  const nViewSpots = mesh.findNViewSpots(event.n);
+
+  const result = nViewSpots.map((element) => ({
+    element_id: element.id,
+    value: element.value,
+  }));
+
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v3.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
+    body: JSON.stringify(result, null, 2),
   };
-};
+}
