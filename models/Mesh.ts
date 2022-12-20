@@ -23,7 +23,7 @@ export class Mesh {
       (neighbour) => neighbour.value > element.value
     );
 
-    return !!higherNeighbour;
+    return !higherNeighbour;
   }
 
   private findNeighbours(element: Element): Element[] {
