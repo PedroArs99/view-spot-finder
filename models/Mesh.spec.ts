@@ -2,6 +2,8 @@ import mesh1 from "../examples/mesh_1.json";
 import mesh2 from "../examples/mesh_2.json";
 import mesh3 from "../examples/mesh_3.json";
 import mesh200 from "../examples/mesh_200.json";
+import mesh10K from "../examples/mesh_10K.json";
+import mesh20K from "../examples/mesh_20K.json";
 import { MeshDto, meshDtoToDomain } from "./MeshDto";
 
 describe("Mesh Tests", () => {
@@ -193,5 +195,46 @@ describe("Mesh Tests", () => {
     ];
     expect(result.length).toBe(5);
     expect(result).toEqual(expectedResult);
+  });
+});
+
+describe("Load Tests", () => {
+  it("Time needed to parse 10K Mesh", () => {
+    const startTime = performance.now();
+    const mesh = meshDtoToDomain(mesh10K.mesh);
+    const endTime = performance.now();
+
+    console.log(`Time elapsed in ms: ${endTime - startTime}`);
+  });
+
+  it("Time needed to parse 20K Mesh", () => {
+    const startTime = performance.now();
+    const mesh = meshDtoToDomain(mesh20K.mesh);
+    const endTime = performance.now();
+
+    console.log(`Time elapsed in ms: ${endTime - startTime}`);
+  });
+
+  it.each([
+    0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 10000,
+  ])("Time needed to get view spots on the 10K Mesh", (n: number) => {
+    const startTime = performance.now();
+    const mesh = meshDtoToDomain(mesh10K.mesh);
+    const result = mesh.findNViewSpots(n);
+    const endTime = performance.now();
+
+    console.log(`Time elapsed in ms: ${endTime - startTime}`);
+  });
+
+  it.each([
+    0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384,
+    20000,
+  ])("Time needed to get view spots on the 20K Mesh", (n: number) => {
+    const startTime = performance.now();
+    const mesh = meshDtoToDomain(mesh20K.mesh);
+    const result = mesh.findNViewSpots(n);
+    const endTime = performance.now();
+
+    console.log(`Time elapsed in ms: ${endTime - startTime}`);
   });
 });
