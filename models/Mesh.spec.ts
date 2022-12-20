@@ -1,9 +1,8 @@
 import mesh1 from "../examples/mesh_1.json";
 import mesh2 from "../examples/mesh_2.json";
 import mesh3 from "../examples/mesh_3.json";
+import mesh4 from "../examples/mesh_4.json";
 import mesh200 from "../examples/mesh_200.json";
-import mesh10K from "../examples/mesh_10K.json";
-import mesh20K from "../examples/mesh_20K.json";
 import { MeshDto, meshDtoToDomain } from "./MeshDto";
 
 describe("Mesh Tests", () => {
@@ -82,6 +81,61 @@ describe("Mesh Tests", () => {
       expect(result[0]).toEqual(expectedResult);
     }
   );
+
+  it("Should return 2 results", () => {
+    const mesh = meshDtoToDomain(mesh4.mesh);
+
+    const result = mesh.findNViewSpots(2);
+
+    const expectedResult = [
+      {
+        id: 0,
+        isViewSpot: true,
+        nodes: [
+          {
+            id: 0,
+            x: 1.0,
+            y: 0.0,
+          },
+          {
+            id: 1,
+            x: 0.0,
+            y: 1.0,
+          },
+          {
+            id: 2,
+            x: 1.0,
+            y: 1.0,
+          },
+        ],
+        value: 1,
+      },
+      {
+        id: 3,
+        isViewSpot: true,
+        nodes: [
+          {
+            id: 3,
+            x: 1.0,
+            y: 2.0,
+          },
+          {
+            id: 4,
+            x: 0.0,
+            y: 2.0,
+          },
+          {
+            id: 5,
+            x: 1.0,
+            y: 3.0,
+          },
+        ],
+        value: 1,
+      },
+    ];
+    expect(result.length).toBe(2);
+    expect(result).toEqual(expectedResult);
+  });
 
   it("Should return the first 5 results", () => {
     const mesh = meshDtoToDomain(mesh200.mesh);
