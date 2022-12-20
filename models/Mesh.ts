@@ -23,7 +23,16 @@ export class Mesh {
       (neighbour) => neighbour.value > element.value
     );
 
-    return !higherNeighbour;
+    if (!higherNeighbour) {
+      const equalNeighbour = neighbours.find(
+        (neighbour) => neighbour.value === element.value
+      );
+
+      // In case of two or more elements with the same value only the one with the less id will be considered a view spot
+      return !equalNeighbour || element.id < equalNeighbour.id;
+    } else {
+      return false;
+    }
   }
 
   private findNeighbours(element: Element): Element[] {
