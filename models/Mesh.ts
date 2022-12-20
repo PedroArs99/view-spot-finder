@@ -26,13 +26,14 @@ export class Mesh {
 
           if (higherNeighbour.length > 0) {
             element.isViewSpot = false;
-            neighbours.forEach((neighbour) => {
-              if (neighbour.value < element.value) neighbour.isViewSpot = false;
-            });
           } else {
             element.isViewSpot = true;
             sortedViewSpots.push(element);
           }
+          
+          neighbours.forEach((neighbour) => {
+            if (neighbour.value <= element.value) neighbour.isViewSpot = false;
+          });
         }
       }
 
