@@ -1,4 +1,4 @@
-import { Mesh } from "./Mesh";
+import { Mesh, Element } from "./Mesh";
 
 export interface MeshDto {
   elements: ElementDto[];
@@ -47,4 +47,11 @@ function filterValueByElementId(
   elementId: number
 ): number {
   return values.find((value) => value.element_id === elementId)!.value!;
+}
+
+export function elementToElementValueDto(element: Element): ElementValueDto {
+  return {
+    element_id: element.id,
+    value: element.value,
+  };
 }
