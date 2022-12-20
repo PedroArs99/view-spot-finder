@@ -1,28 +1,32 @@
 import { Mesh } from "./Mesh";
 
 export interface MeshDto {
-  elements: {
-    id: number;
-    nodes: number[];
-  }[];
-  nodes: {
-    id: number;
-    x: number;
-    y: number;
-  }[];
-  values: {
-    element_id: number;
-    value: number;
-  }[];
+  elements: ElementDto[];
+  nodes: NodeDto[];
+  values: ElementValueDto[];
+}
+
+interface ElementDto {
+  id: number;
+  nodes: number[];
+}
+
+interface NodeDto {
+  id: number;
+  x: number;
+  y: number;
+}
+
+interface ElementValueDto {
+  element_id: number;
+  value: number;
 }
 
 export function meshDtoToDomain(dto: MeshDto): Mesh {
   const elements = dto.elements.map((elementDto) => {
     const id = elementDto.id;
-    const nodes = elementDto.nodes.map(
-      (nodeId) => dto.nodes.find((node) => node.id === nodeId)!
-    );
-    const value = dto.values.find((value) => value.element_id === id)!.value;
+    const nodes = filterNodesById(dto.nodes, elementDto.nodes);
+    const value = filterValueByElementId(dto.values, elementDto.id);
 
     return {
       id,
@@ -32,4 +36,15 @@ export function meshDtoToDomain(dto: MeshDto): Mesh {
   });
 
   return new Mesh(elements);
+}
+
+function filterNodesById(nodes: NodeDto[], nodeIds: number[]): NodeDto[] {
+  return nodes.filter((node) => nodeIds.includes(node.id));
+}
+
+function filterValueByElementId(
+  values: ElementValueDto[],
+  elementId: number
+): number {
+  return values.find((value) => value.element_id === elementId)!.value!;
 }
