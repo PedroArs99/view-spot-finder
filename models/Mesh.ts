@@ -20,11 +20,11 @@ export class Mesh {
 
         if (element.isViewSpot === undefined) {
           const neighbours = this.findNeighbours(element);
-          const higherNeighbour = neighbours.filter(
+          const higherNeighbour = neighbours.find(
             (neighbour) => neighbour.value > element.value
           );
 
-          if (higherNeighbour.length > 0) {
+          if (higherNeighbour) {
             element.isViewSpot = false;
           } else {
             element.isViewSpot = true;
