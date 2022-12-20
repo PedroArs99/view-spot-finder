@@ -24,6 +24,7 @@ describe("Mesh Tests", () => {
 
       const expectedResult = {
         id: 0,
+        isViewSpot: true,
         nodes: [
           {
             id: 0,
@@ -57,6 +58,7 @@ describe("Mesh Tests", () => {
 
       const expectedResult = {
         id: 0,
+        isViewSpot: true,
         nodes: [
           {
             id: 0,
@@ -89,6 +91,7 @@ describe("Mesh Tests", () => {
     const expectedResult = [
       {
         id: 153,
+        isViewSpot: true,
         nodes: [
           {
             id: 83,
@@ -110,6 +113,7 @@ describe("Mesh Tests", () => {
       },
       {
         id: 141,
+        isViewSpot: true,
         nodes: [
           {
             id: 77,
@@ -131,6 +135,7 @@ describe("Mesh Tests", () => {
       },
       {
         id: 99,
+        isViewSpot: true,
         nodes: [
           {
             id: 53,
@@ -152,6 +157,7 @@ describe("Mesh Tests", () => {
       },
       {
         id: 87,
+        isViewSpot: true,
         nodes: [
           {
             id: 47,
@@ -173,6 +179,7 @@ describe("Mesh Tests", () => {
       },
       {
         id: 199,
+        isViewSpot: true,
         nodes: [
           {
             id: 108,

@@ -1,37 +1,40 @@
 export class Mesh {
-  constructor(readonly elements: Element[]) {}
+  readonly elements: Element[];
+
+  constructor(elements: Element[]) {
+    this.elements = this.sortViewSpotsByValueDesc(elements);
+  }
 
   findNViewSpots(n: number): Element[] {
     if (n < 1) {
       return [];
     } else {
-      const viewSpots: Element[] = this.getViewSpots();
-      const sortedViewSpots = this.sortViewSpotsByValueDesc(viewSpots);
-      const firstNViewSpots = sortedViewSpots.slice(0, n);
+      const sortedViewSpots: Element[] = [];
 
-      return firstNViewSpots;
-    }
-  }
+      for (
+        let i = 0;
+        sortedViewSpots.length < n && i < this.elements.length;
+        i++
+      ) {
+        const element = this.elements[i];
 
-  private getViewSpots(): Element[] {
-    return this.elements.filter((element) => this.isViewSpot(element));
-  }
+        if (element.isViewSpot === undefined) {
+          const neighbours = this.findNeighbours(element);
+          const higherNeighbour = neighbours.filter(
+            (neighbour) => neighbour.value > element.value
+          );
 
-  private isViewSpot(element: Element): boolean {
-    const neighbours = this.findNeighbours(element);
-    const higherNeighbour = neighbours.find(
-      (neighbour) => neighbour.value > element.value
-    );
+          if (higherNeighbour.length > 0) {
+            element.isViewSpot = false;
+          } else {
+            element.isViewSpot = true;
+            sortedViewSpots.push(element);
+            neighbours.forEach(neighbour => neighbour.isViewSpot = false)
+          }
+        }
+      }
 
-    if (!higherNeighbour) {
-      const equalNeighbour = neighbours.find(
-        (neighbour) => neighbour.value === element.value
-      );
-
-      // In case of two or more elements with the same value only the one with the less id will be considered a view spot
-      return !equalNeighbour || element.id < equalNeighbour.id;
-    } else {
-      return false;
+      return sortedViewSpots;
     }
   }
 
@@ -63,14 +66,19 @@ export class Mesh {
   }
 
   private sortViewSpotsByValueDesc(viewSpots: Element[]) {
-    return viewSpots.sort(
-      (spotA: Element, spotB: Element) => spotB.value - spotA.value
-    );
+    return viewSpots.sort((spotA: Element, spotB: Element) => {
+      if (spotA.value === spotB.value) {
+        return spotA.id - spotB.id;
+      } else {
+        return spotB.value - spotA.value;
+      }
+    });
   }
 }
 
 export interface Element {
   readonly id: number;
+  isViewSpot?: boolean;
   readonly nodes: Node[];
   readonly value: number;
 }
