@@ -20,16 +20,18 @@ export class Mesh {
 
         if (element.isViewSpot === undefined) {
           const neighbours = this.findNeighbours(element);
-          const higherNeighbour = neighbours.find(
+          const higherNeighbour = neighbours.filter(
             (neighbour) => neighbour.value > element.value
           );
 
-          if (higherNeighbour) {
+          if (higherNeighbour.length > 0) {
             element.isViewSpot = false;
+            neighbours.forEach((neighbour) => {
+              if (neighbour.value < element.value) neighbour.isViewSpot = false;
+            });
           } else {
             element.isViewSpot = true;
             sortedViewSpots.push(element);
-            neighbours.forEach(neighbour => neighbour.isViewSpot = false)
           }
         }
       }
