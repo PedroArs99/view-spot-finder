@@ -4,13 +4,21 @@ import { FindNSpotsCommandDto } from "./models/FindNSpotsCommandDto";
 import { elementToElementValueDto, meshDtoToDomain } from "./models/MeshDto";
 
 export function viewSpotFinder(event: FindNSpotsCommandDto) {
-  const mesh = meshDtoToDomain(event.mesh);
-  const nViewSpots = mesh.findNViewSpots(event.n);
+  try {
+    const mesh = meshDtoToDomain(event.mesh);
+    const nViewSpots = mesh.findNViewSpots(event.n);
 
-  const result = nViewSpots.map((element) => elementToElementValueDto(element));
+    const result = nViewSpots.map((element) =>
+      elementToElementValueDto(element)
+    );
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result, null, 2),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result, null, 2),
+    };
+  } catch (error) {
+    return {
+      statusCode: 400,
+    };
+  }
 }
