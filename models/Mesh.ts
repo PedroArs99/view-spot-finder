@@ -11,32 +11,46 @@ export class Mesh {
     } else {
       const sortedViewSpots: Element[] = [];
 
-      for(const element of this.elements){
-        if(element.isViewSpot === undefined) {
-          const neighbours = this.findNeighbours(element);
-          const higherNeighbour = neighbours.filter(
-            (neighbour) => neighbour.value > element.value
-          );
-
-          if (higherNeighbour.length > 0) {
-            element.isViewSpot = false;
-          } else {
+      for (const element of this.elements) {
+        if (this.isUnknownViewSpot(element)) {
+          element.neighbours = this.findNeighbours(element);
+          
+          if(this.isViewSpot(element)) {
             element.isViewSpot = true;
             sortedViewSpots.push(element);
+          } else {
+            element.isViewSpot = false;
           }
           
-          neighbours.forEach((neighbour) => {
-            if (neighbour.value <= element.value) neighbour.isViewSpot = false;
-          });
+          this.boundNeighbours(element);
         }
 
-        if(sortedViewSpots.length === n){
-          break
+        if (this.areThereEnoughViewSpots(sortedViewSpots, n)) {
+          break;
         }
       }
 
       return sortedViewSpots;
     }
+  }
+
+  private boundNeighbours(element: Element): void {
+    element.neighbours?.forEach((neighbour) => {
+      if (neighbour.value <= element.value)
+        neighbour.isViewSpot = false;
+    });
+  }
+
+  private isViewSpot(element: Element): boolean {
+    const higherNeighbour = element.neighbours?.find(
+      (neighbour) => neighbour.value > element.value
+    );
+
+    return !higherNeighbour
+  }
+
+  private isUnknownViewSpot(element: Element): boolean {
+    return element.isViewSpot === undefined;
   }
 
   private findNeighbours(element: Element): Element[] {
@@ -66,7 +80,7 @@ export class Mesh {
     );
   }
 
-  private sortViewSpotsByValueDesc(viewSpots: Element[]) {
+  private sortViewSpotsByValueDesc(viewSpots: Element[]): Element[] {
     return viewSpots.sort((spotA: Element, spotB: Element) => {
       if (spotA.value === spotB.value) {
         return spotA.id - spotB.id;
@@ -75,12 +89,17 @@ export class Mesh {
       }
     });
   }
+
+  private areThereEnoughViewSpots(sortedViewSpots: Element[], n: number) {
+    return sortedViewSpots.length === n;
+  }
 }
 
 export interface Element {
   readonly id: number;
   isViewSpot?: boolean;
   readonly nodes: Node[];
+  neighbours?: Element[];
   readonly value: number;
 }
 
