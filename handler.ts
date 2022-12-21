@@ -3,7 +3,7 @@
 import { FindNSpotsCommandDto } from "./models/FindNSpotsCommandDto";
 import { elementToElementValueDto, meshDtoToDomain } from "./models/MeshDto";
 
-export async function viewSpotFinder(event: FindNSpotsCommandDto) {
+export function viewSpotFinder(event: FindNSpotsCommandDto) {
   const mesh = meshDtoToDomain(event.mesh);
   const nViewSpots = mesh.findNViewSpots(event.n);
 

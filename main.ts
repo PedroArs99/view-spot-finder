@@ -1,16 +1,21 @@
 "use strict";
 
-import { FindNSpotsCommandDto } from "./models/FindNSpotsCommandDto";
-import { elementToElementValueDto, meshDtoToDomain } from "./models/MeshDto";
+import * as fs from "fs";
 
-export async function viewSpotFinder(event: FindNSpotsCommandDto) {
-  const mesh = meshDtoToDomain(event.mesh);
-  const nViewSpots = mesh.findNViewSpots(event.n);
+import { MeshDto } from "./models/MeshDto";
 
-  const result = nViewSpots.map((element) => elementToElementValueDto(element));
+import { viewSpotFinder } from "./handler";
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result, null, 2),
-  };
+const [_, __, meshFilePath, n] = process.argv;
+
+try {
+  const meshFileContent: string = fs.readFileSync(meshFilePath, "utf8");
+  const mesh: MeshDto = JSON.parse(meshFileContent);
+  const numberOfViewSpots = Number.parseInt(n);
+
+  const result = viewSpotFinder({ n: numberOfViewSpots, mesh });
+  
+  console.log(result);
+} catch (err) {
+  console.error(err);
 }
