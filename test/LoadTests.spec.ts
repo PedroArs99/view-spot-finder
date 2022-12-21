@@ -1,6 +1,6 @@
 import { meshDtoToDomain } from "../models/MeshDto";
-import mesh10K from "../examples/mesh_10K.json";
-import mesh20K from "../examples/mesh_20K.json";
+import mesh10K from "../examples/serverless/mesh_10K.json";
+import mesh20K from "../examples/serverless/mesh_20K.json";
 
 describe("Load Tests", () => {
   it.each([

@@ -1,8 +1,8 @@
-import mesh1 from "../examples/mesh_1.json";
-import mesh2 from "../examples/mesh_2.json";
-import mesh3 from "../examples/mesh_3.json";
-import mesh4 from "../examples/mesh_4.json";
-import mesh200 from "../examples/mesh_200.json";
+import mesh1 from "../examples/serverless/mesh_1.json";
+import mesh2 from "../examples/serverless/mesh_2.json";
+import mesh3 from "../examples/serverless/mesh_3.json";
+import mesh4 from "../examples/serverless/mesh_4.json";
+import mesh200 from "../examples/serverless/mesh_200.json";
 import { MeshDto, meshDtoToDomain } from "./MeshDto";
 
 describe("Mesh Tests", () => {
