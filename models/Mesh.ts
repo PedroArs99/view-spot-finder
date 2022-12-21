@@ -11,14 +11,8 @@ export class Mesh {
     } else {
       const sortedViewSpots: Element[] = [];
 
-      for (
-        let i = 0;
-        sortedViewSpots.length < n && i < this.elements.length;
-        i++
-      ) {
-        const element = this.elements[i];
-
-        if (element.isViewSpot === undefined) {
+      for(const element of this.elements){
+        if(element.isViewSpot === undefined) {
           const neighbours = this.findNeighbours(element);
           const higherNeighbour = neighbours.filter(
             (neighbour) => neighbour.value > element.value
@@ -34,6 +28,10 @@ export class Mesh {
           neighbours.forEach((neighbour) => {
             if (neighbour.value <= element.value) neighbour.isViewSpot = false;
           });
+        }
+
+        if(sortedViewSpots.length === n){
+          break
         }
       }
 
